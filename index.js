@@ -104,6 +104,31 @@ app.get("/protected", verifyAccessToken, (req, res) => {
   res.json({ message: "This is a protected route", user: req.user ,data});
 });
 
+app.post("/loginCheck", verifyAccessToken, (req, res) => {
+res.json({ message: "Login successful", user: req.user});
+});
+
+
+
+app.post('/logout', (req, res) => {
+  // Expire the HTTP-only secure cookie
+
+  // Check if the HTTP-only secure cookies exist
+  const hasAccessToken = req.cookies.accessToken !== undefined;
+  const hasRefreshToken = req.cookies.refreshToken !== undefined;
+
+  // Clear the HTTP-only secure cookies if they exist
+  if (hasAccessToken) {
+    res.clearCookie('accessToken', { httpOnly: true, secure: true, sameSite: 'strict', path: '/' });
+  }
+
+  if (hasRefreshToken) {
+    res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'strict', path: '/' });
+  }
+  // Send a response
+  res.json({ message: "Logged out successfully"});
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
