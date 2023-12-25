@@ -1,11 +1,10 @@
-// index.js
 const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const cookieParser = require('cookie-parser');
 const cors = require('cors'); // Import the cors middleware
 require('dotenv').config();
-
+const userModel = require("./userModel");
 const app = express();
 const PORT = process.env.PORT;
 
@@ -17,12 +16,9 @@ const corsOptions = {
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
-// Your routes will go here
 
-// index.js
-// ... (previous code)
 
-const userModel = require("./userModel");
+
 // Function to generate a JWT token
 const generateAccessToken = (userId) => {
   return jwt.sign({ userId }, process.env.ACCESS_SECRET_KEY, { expiresIn: "15m" });
@@ -73,8 +69,6 @@ app.post("/login", (req, res) => {
   res.json({ message: "Login successful" });
 });
 
-// index.js
-// ... (previous code)
 
 // Route to refresh the access token using the refresh token
 app.post("/refresh", (req, res) => {
